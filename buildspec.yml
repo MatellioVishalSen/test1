@@ -1,18 +1,18 @@
 version: 0.2
 
 phases:
-  build:
-    commands:
-      - echo "This is build phase... Zipping my webpage"
+   build:
+     commands:
+       - echo "This is build phase... Zipping my webpage"
+  
+   post_build:
+     commands:
+       - echo "Deployed to S3"
+       
+   finalizing:
+     commands:
+       - aws sns publish --topic-arn arn:aws:sns:us-east-1:061163654383:codesns --subject "CodePipeline Notification" --message "CodePipeline execution status: $CODEBUILD_BUILD_SUCCEEDING"
  
-  post_build:
-    commands:
-      - echo "Deployed to S3"
-      
-  finalizing:
-    commands:
-      - aws sns publish --topic-arn arn:aws:sns:us-east-1:061163654383:codesns --subject "CodePipeline Notification" --message "CodePipeline execution status: $CODEBUILD_BUILD_SUCCEEDING"
-
 artifacts:
   files:
     - '**/*'
