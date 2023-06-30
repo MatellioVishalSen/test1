@@ -8,6 +8,10 @@ phases:
   post_build:
     commands:
     - echo "Deployed to S3"
+  finalizing:
+    commands:
+      - aws sns publish --topic-arn arn:aws:sns:us-east-1:061163654383:codesns --subject "CodePipeline Notification" --message "CodePipeline execution status: $CODEBUILD_BUILD_SUCCEEDING"
+
 artifacts:
   files:
     - '**/*'
